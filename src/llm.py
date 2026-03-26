@@ -1,11 +1,11 @@
-import google.generativeai as genai
 import os
+from google import genai
 
-# 🔑 Set your API key here OR via environment variable
-genai.configure(api_key=os.getenv("AIzaSyBlrtA8VqH-s0n97HQdgKBfH_jiBpZYYbo"))
-
-model = genai.GenerativeModel("gemini-1.5-flash")
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 def ask_llm(prompt):
-    response = model.generate_content(prompt)
+    response = client.models.generate_content(
+        model="gemini-1.5-flash",
+        contents=prompt
+    )
     return response.text
