@@ -1,19 +1,15 @@
-def load_knowledge():
-    with open("data/knowledge.txt", "r") as f:
-        return f.read()
+import json
 
-knowledge = load_knowledge()
+with open("data/knowledge_base.json") as f:
+    kb = json.load(f)
 
 def retrieve_context(query):
     query = query.lower()
+    results = []
 
-    if "refund" in query:
-        return "Refunds are processed within 5-7 business days."
-    elif "return" in query:
-        return "Products can be returned within 30 days."
-    elif "shipping" in query:
-        return "Shipping takes 3-5 business days."
-    elif "technical" in query or "not working" in query:
-        return "Try restarting the device. If issue persists, contact support."
+    for category in kb["categories"]:
+        for item in category["items"]:
+            if any(word in item.get("question", "").lower() for word in query.split()):
+                results.append(item)
 
-    return "No relevant information found."
+    return results[:3]  # top 3 matches
